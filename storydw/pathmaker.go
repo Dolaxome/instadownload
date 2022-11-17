@@ -22,9 +22,13 @@ func FileExt(url string) string {
 	return path.Ext(filename)
 }
 
-func FormatTimestamp(timestamp int64) string {
-	t := time.Unix(timestamp, 0)
-	return t.Format(time.RFC3339)
+func FormatTimestamp() string {
+	// r := time.Unix(timestamp, 0)
+	// fmt.Println(r)
+	t := time.Now()
+	p := strconv.Itoa(t.Day()) + "." + strconv.Itoa(int(t.Month())) + "." + strconv.Itoa(int(t.Year()))
+	return p + " " + t.Format("15:04:05")
+	// return t.Format(time.RFC3339)
 }
 
 func CreateIfNotExist(dir string) (err error) {
@@ -34,12 +38,12 @@ func CreateIfNotExist(dir string) (err error) {
 	return
 }
 
-func BuildPath(username, url string, timestamp int64) string {
+func BuildPath(username, url string, counter int) string {
 	dirname := path.Join("stories", username)
 	CreateIfNotExist(dirname)
 	ext := FileExt(url)
-	ts := FormatTimestamp(timestamp)
-	filename := username + "-" + ts + strconv.FormatInt(timestamp, 10) + ext
+	ts := FormatTimestamp()
+	filename := username + " " + ts[0:10] + " [" + strconv.Itoa(counter) + "]" + ext
 	p := path.Join(dirname, filename)
 	return p
 }
